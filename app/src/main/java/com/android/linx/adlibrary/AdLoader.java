@@ -27,6 +27,12 @@ public class AdLoader {
     private static final String TAG = "AdLoader";
     private static final int AD_TIME_OUT = 3000;
 
+
+    public static void loadSplashAd(final Activity context, boolean mIsExpress, String mCodeId, final FrameLayout mSplashContainer, final Class clazz) {
+        Intent intent = new Intent(context, clazz);
+        loadSplashAd(context, mIsExpress, mCodeId, mSplashContainer, intent);
+    }
+
     /**
      * 加载开屏广告
      */
