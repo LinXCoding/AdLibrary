@@ -1,7 +1,6 @@
 package com.android.linx.adlibrary;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
@@ -24,15 +23,15 @@ import com.bytedance.sdk.openadsdk.TTSplashAd;
  * @QQ 297258690
  */
 public class AdLoader {
-    private TTAdNative mTTAdNative;
+    private static TTAdNative mTTAdNative;
     private static final String TAG = "AdLoader";
     private static final int AD_TIME_OUT = 3000;
 
     /**
      * 加载开屏广告
      */
-    private void loadSplashAd(final Activity context, boolean mIsExpress, String mCodeId, final FrameLayout mSplashContainer, final Class mClass) {
-        mTTAdNative = AdHelper.INSTANCE.get().createAdNative(context);
+    public static void loadSplashAd(final Activity context, boolean mIsExpress, String mCodeId, final FrameLayout mSplashContainer, final Intent intent) {
+        mTTAdNative = TTAdManagerHolder.get().createAdNative(context);
 
         //step3:创建开屏广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = null;
@@ -63,14 +62,14 @@ public class AdLoader {
             public void onError(int code, String message) {
 
                 Log.d(TAG, message);
-                 goToMainActivity(context,mClass,mSplashContainer);
+                goToMainActivity(context, intent, mSplashContainer);
             }
 
             @Override
             @MainThread
             public void onTimeout() {
                 Log.d(TAG, "onTimeout");
-                 goToMainActivity(context,mClass,mSplashContainer);
+                goToMainActivity(context, intent, mSplashContainer);
             }
 
             @Override
@@ -88,8 +87,9 @@ public class AdLoader {
                     mSplashContainer.addView(view);
                     //设置不开启开屏广告倒计时功能以及不显示跳过按钮,如果这么设置，您需要自定义倒计时逻辑
                     //ad.setNotAllowSdkCountdown();
+                    mSplashContainer.setVisibility(View.VISIBLE);
                 } else {
-                    goToMainActivity(context,mClass,mSplashContainer);
+                    goToMainActivity(context, intent, mSplashContainer);
                 }
 
                 //设置SplashView的交互监听器
@@ -109,14 +109,14 @@ public class AdLoader {
                     @Override
                     public void onAdSkip() {
                         Log.d(TAG, "onAdSkip");
-                         goToMainActivity(context,mClass,mSplashContainer);
+                        goToMainActivity(context, intent, mSplashContainer);
 
                     }
 
                     @Override
                     public void onAdTimeOver() {
                         Log.d(TAG, "onAdTimeOver");
-                         goToMainActivity(context,mClass,mSplashContainer);
+                        goToMainActivity(context, intent, mSplashContainer);
                     }
                 });
                 if (ad.getInteractionType() == TTAdConstant.INTERACTION_TYPE_DOWNLOAD) {
@@ -168,9 +168,9 @@ public class AdLoader {
     /**
      * 跳转到主页面
      */
-    private void goToMainActivity(Activity activity,Class mClass,FrameLayout mSplashContainer) {
-        Intent intent = new Intent(activity, mClass);
-        activity. startActivity(intent);
+    private static void goToMainActivity(Activity activity, Intent intent, FrameLayout mSplashContainer) {
+
+        activity.startActivity(intent);
         mSplashContainer.removeAllViews();
         activity.finish();
     }
