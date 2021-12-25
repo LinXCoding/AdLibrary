@@ -13,8 +13,8 @@ android {
 //        applicationId "com.android.linx.adlibrary"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 2
-        versionName "1.0.2"
+        versionCode 3
+        versionName "1.0.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,5 +41,5 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation(name: 'open_ad_sdk', ext: 'aar')
+    implementation(name: 'open_ad_sdk_4.2.0.3', ext: 'aar')
 }
